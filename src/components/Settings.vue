@@ -1,0 +1,3 @@
+<template>
+ 没啥好设置的...
+</template>
