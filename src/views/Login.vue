@@ -1,21 +1,24 @@
 <!-- Login.vue -->
 <template>
-    <el-container class="login-container">
-        <el-form :model="loginForm" :rules="rules" ref="loginFormRef" class="login-form" @submit.prevent="handleLogin" @keydown.enter.native="handleLogin">
-            <h3>用户登录</h3>
-            <el-divider />
-            <el-form-item prop="username" class="form-item-fixed">
+    <div class="login-container">
+        <el-form :model="loginForm" :rules="rules" ref="loginFormRef" class="login-form" @submit.prevent="handleLogin" label-width="5rem"
+            @keydown.enter.native="handleLogin">
+            <!-- <div class="logo-div"><el-image src="/logo.png" :fit="none" /></div> -->
+            用户登录
+            <el-divider></el-divider>
+            <el-form-item prop="username" class="form-item-fixed" label="用户名:">
                 <el-input v-model="loginForm.username" placeholder="请输入用户名" :prefix-icon="User" clearable></el-input>
             </el-form-item>
-            <el-form-item prop="password" class="form-item-fixed">
+            <el-form-item prop="password" class="form-item-fixed" label="密码:">
                 <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" :prefix-icon="Lock" clearable
                     show-password></el-input>
             </el-form-item>
-            <el-form-item class="form-item-fixed button-container">
+            <el-divider></el-divider>
+            <div class="button-container">
                 <el-button type="primary" :loading="loading" class="login-button" @click="handleLogin">登录</el-button>
-            </el-form-item>
+            </div>
         </el-form>
-    </el-container>
+    </div>
 </template>
 
 <script setup>
@@ -74,28 +77,41 @@ const handleLogin = () => {
 
 <style scoped>
 .login-container {
-    height: 100%;
-    width: 100%;
     display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
     justify-content: center;
     align-items: center;
 }
 
 .login-form {
-    /* width: 480px; */
-    padding: 0px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* max-width: 480px; */
+    /* margin: 0 20px; */
+    padding: 30px 10px;
+
     background: #fff;
-    border-radius: 20px;
+    border-radius: 30px;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
 }
 
+.logo-div {
+    max-width: 48px;
+}
+
 .login-button {
-    width: 100%;
+    width: 50%;
+    min-width: 2rem;
 }
 
 .button-container {
+    width:100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .forget-password {
@@ -109,10 +125,6 @@ const handleLogin = () => {
 /* 固定 form-item 宽度 */
 .form-item-fixed {
     width: 100%;
-    /* 固定宽度 */
-    max-width: 480px;
-    /* 最大宽度 */
-    margin: 20px auto;
-    /* 居中 */
+
 }
 </style>

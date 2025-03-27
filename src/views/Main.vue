@@ -2,8 +2,11 @@
     <el-container class="dashboard-container">
         <!-- 顶部导航栏 -->
         <el-header class="header">
-            <div>
-                <span class="app-name">那什么什么之类的管理系统</span>
+            <div style="display:flex;">
+                <el-image src="/logo.png"  style="height: 3rem; width: 3rem; margin-right:1rem;" />
+                <span class="app-name">
+                    那什么什么之类的管理系统
+                </span>
             </div>
 
             <div>
@@ -33,40 +36,54 @@
         <!-- 左侧导航栏 + 主内容 + footer -->
         <el-container class="main-container">
             <!-- 左侧导航栏 -->
-            <el-aside class="menu-aside" width="200px" height="100%">
-                <el-menu :default-active="activeMenu" class="sidebar-menu" @select="handleMenuSelect">
-                    <el-menu-item index="/index">
-                        <el-icon>
-                            <House />
+            <!-- <el-aside class="menu-aside" width="200px" height="100%"> -->
+            <el-menu :default-active="activeMenu" class="sidebar-menu" :collapse="isCollapse"
+                @select="handleMenuSelect">
+                <el-menu-item index="/index">
+                    <el-icon>
+                        <House />
+                    </el-icon>
+                    <span>首页</span>
+                </el-menu-item>
+                <el-menu-item v-if="isAdmin" index="/sysusers">
+                    <el-icon>
+                        <User />
+                    </el-icon>
+                    <span>用户管理</span>
+                </el-menu-item>
+                <el-menu-item index="/settings">
+                    <el-icon>
+                        <Setting />
+                    </el-icon>
+                    <span>设置</span>
+                </el-menu-item>
+                <el-menu-item index="/version">
+                    <el-icon>
+                        <Flag />
+                    </el-icon>
+                    <span>版本</span>
+                </el-menu-item>
+
+                <div style="margin:1px 1px; flex: 1; display:flex;">
+                    <el-button link plain @click="isCollapse = !isCollapse" style="margin-top: auto; margin-left:auto;">
+                        <el-icon v-if="isCollapse" style="margin-right:1px;">
+                            <Expand />
                         </el-icon>
-                        <span>首页</span>
-                    </el-menu-item>
-                    <el-menu-item v-if="isAdmin" index="/sysusers">
-                        <el-icon>
-                            <User />
+                        <el-icon v-else style="margin-right:1px;">
+                            <Fold />
                         </el-icon>
-                        <span>用户管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="/settings">
-                        <el-icon>
-                            <Setting />
-                        </el-icon>
-                        <span>设置</span>
-                    </el-menu-item>
-                    <el-menu-item index="/version">
-                        <el-icon>
-                            <Flag />
-                        </el-icon>
-                        <span>版本</span>
-                    </el-menu-item>
-                </el-menu>
-            </el-aside>
+
+                    </el-button>
+                </div>
+
+            </el-menu>
 
             <!-- 主内容区域 + footer-->
-            <el-container class="content-container">
+            <el-container>
                 <!-- 主内容区域 -->
                 <el-main class="content-main">
                     <router-view></router-view>
+
                 </el-main>
                 <el-footer class="footer">Copyright</el-footer>
             </el-container>
@@ -101,7 +118,7 @@
 import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import { House, User, Setting, Flag, UserFilled, ArrowDownBold } from '@element-plus/icons-vue';
+import { House, User, Setting, Flag, UserFilled, ArrowDownBold, Expand, Fold } from '@element-plus/icons-vue';
 import { useUserStore } from '@/stores/user';
 import request from '@/utils/request';
 import API from '@/config/api';
@@ -113,6 +130,10 @@ const userStore = useUserStore();
 const user = userStore.user;
 
 const isAdmin = computed(() => userStore.user?.role === 'admin');
+
+//折叠菜单
+const isCollapse = ref(true)
+
 
 // 修改用户信息弹窗
 const editUserInfoForm = ref(null);
@@ -170,7 +191,6 @@ const updateUserInfo = async () => {
             editUserInfoForm.value.resetFields();
             editInfoDialogVisible.value = false;
         } else {
-            console.log(response);
             ElMessage.error('密码修改失败');
         }
     } catch (error) {
@@ -205,9 +225,11 @@ const logout = () => {
 
 <style scoped>
 .dashboard-container {
-    height: 100%;
+    height: 100vh;
     width: 100%;
+    max-height: 100vh;
     flex-direction: column;
+    overflow: hidden;
     background-color: rgba(245, 245, 245);
     /* padding: 1px; */
 }
@@ -222,12 +244,6 @@ const logout = () => {
     margin-bottom: 2px;
 }
 
-.content-container {
-    /* height: 100%; */
-    /* width: 100%; */
-    padding: 0 0;
-}
-
 .content-main {
     padding: 0 0;
 }
@@ -237,12 +253,14 @@ const logout = () => {
     justify-content: center;
     align-items: center;
     background-color: #fff;
-    margin-top: 2px;
+    height: 2rem;
+    margin-top: 5px;
 }
 
 .app-name {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: bold;
+    height: 3rem;
 }
 
 .user-info {
@@ -257,15 +275,12 @@ const logout = () => {
 
 .main-container {
     width: 100%;
-    /* display: flex; */
-}
-
-.menu-aside {
-    background-color: #fff;
-    margin-right: 2px;
+    display: flex;
+    overflow: hidden;
 }
 
 .sidebar-menu {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 </style>

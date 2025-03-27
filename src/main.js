@@ -6,11 +6,12 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import router from './router'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'; // 导入 Pinia 插件
-
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 const app = createApp(App)
-app.use(ElementPlus)
-
+app.use(ElementPlus, {
+    locale: zhCn,
+  })
 // Pinia用于状态管理，piniaPluginPersistedstate用于持久化状态
 // 用于存储用户登录状态和信息
 const pinia = createPinia(); // 创建 Pinia 实例
